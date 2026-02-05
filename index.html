@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Happy Rose Day 🌹</title>
+
+<style>
+body{
+  text-align:center;
+  font-family:Arial;
+  background:linear-gradient(to right,#ff758c,#ff7eb3);
+  color:white;
+}
+
+input{
+  padding:10px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+}
+
+button{
+  padding:10px 20px;
+  font-size:18px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  margin:10px;
+}
+
+#rose{font-size:50px;cursor:pointer;display:none;}
+#score{display:none;font-size:20px;}
+#proposal{display:none;}
+#no{position:absolute;background:black;color:white;}
+</style>
+
+</head>
+
+<body>
+
+<h1>🌹 Happy Rose Day 🌹</h1>
+
+<div id="start">
+  <p>Enter your Girlfriend Name 💖</p>
+  <input type="text" id="gfname" placeholder="Type name here">
+  <br>
+  <button onclick="startGame()">Start 💕</button>
+</div>
+
+<h2 id="showName"></h2>
+
+<p id="gameText" style="display:none;">Tap rose to reach score 10 😍</p>
+<div id="rose" onclick="scorePoint()">🌹</div>
+<div id="score">Score: 0</div>
+
+<div id="proposal">
+  <h2>💖 Will you be my Valentine? 💖</h2>
+  <button onclick="alert('Yay 💖 Happy Rose Day 🌹')">Yes 😍</button>
+  <button id="no" onmouseover="moveNo()">No 😜</button>
+</div>
+
+<script>
+let score=0;
+
+function startGame(){
+  let name=document.getElementById("gfname").value;
+  if(name==""){name="My Love 💖";}
+  document.getElementById("showName").innerHTML="For: "+name+" 🌹";
+  document.getElementById("start").style.display="none";
+  document.getElementById("rose").style.display="block";
+  document.getElementById("score").style.display="block";
+  document.getElementById("gameText").style.display="block";
+}
+
+function scorePoint(){
+  score++;
+  document.getElementById("score").innerHTML="Score: "+score;
+  if(score>=10){
+    document.getElementById("proposal").style.display="block";
+  }
+}
+
+function moveNo(){
+  let x=Math.random()*window.innerWidth-100;
+  let y=Math.random()*window.innerHeight-50;
+  let btn=document.getElementById("no");
+  btn.style.left=x+"px";
+  btn.style.top=y+"px";
+}
+</script>
+
+</body>
+</html>
