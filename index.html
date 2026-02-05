@@ -12,37 +12,40 @@ body{
   background:linear-gradient(135deg,#ff4d6d,#ff8fa3,#ffc2d1);
   color:white;
   overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  width:100%;
+  max-width:420px;
+  padding:20px;
 }
 
 footer{
   position:fixed;
-  bottom:8px;
+  bottom:6px;
   width:100%;
-  font-size:14px;
-  opacity:0.85;
+  font-size:13px;
+  opacity:0.9;
 }
 
-/* Floating hearts */
+/* Hearts */
 .heart{
   position:fixed;
   bottom:-20px;
-  font-size:20px;
+  font-size:18px;
   animation:float 6s linear infinite;
-  opacity:0.7;
 }
 @keyframes float{
   from{transform:translateY(0);}
   to{transform:translateY(-110vh);}
 }
 
-.container{
-  position:relative;
-  top:50%;
-  transform:translateY(-50%);
-  padding:20px;
-}
-
 input{
+  width:80%;
   padding:12px;
   border-radius:10px;
   border:none;
@@ -50,27 +53,25 @@ input{
 }
 
 button{
-  padding:12px 22px;
+  padding:12px 20px;
   border:none;
   border-radius:25px;
   font-size:16px;
-  cursor:pointer;
   margin:8px;
+  cursor:pointer;
 }
 
 .mainBtn{background:white;color:#ff4d6d;font-weight:bold;}
-#no{position:absolute;background:black;color:white;}
 
 #rose{
-  font-size:60px;
-  cursor:pointer;
+  font-size:55px;
   margin:15px;
-  transition:0.2s;
+  cursor:pointer;
+  position:relative;
 }
-#rose:hover{transform:scale(1.2);}
 
 .progress{
-  width:80%;
+  width:90%;
   height:12px;
   background:rgba(255,255,255,0.3);
   border-radius:20px;
@@ -83,6 +84,12 @@ button{
   border-radius:20px;
 }
 
+#no{
+  position:fixed;
+  background:black;
+  color:white;
+}
+
 #game,#final{display:none;}
 </style>
 </head>
@@ -91,7 +98,7 @@ button{
 
 <div class="container">
 
-<h1>🌹 Happy Rose Day 🌹</h1>
+<h2>🌹 Happy Rose Day 🌹</h2>
 
 <div id="generator">
   <p>Enter your Girlfriend Name 💖</p>
@@ -102,8 +109,8 @@ button{
 </div>
 
 <div id="game">
-  <h2 id="showName"></h2>
-  <p>Catch the rose & fill love meter 💕</p>
+  <h3 id="showName"></h3>
+  <p>Tap rose to fill love meter 💕</p>
 
   <div id="rose" onclick="scorePoint()">🌹</div>
 
@@ -111,19 +118,18 @@ button{
     <div class="bar" id="bar"></div>
   </div>
 
-  <h3 id="scoreText">Love Meter: 0%</h3>
+  <h4 id="scoreText">Love Meter: 0%</h4>
 
   <div id="proposal" style="display:none;">
-    <h2>💖 Will you be my Valentine? 💖</h2>
+    <h3>💖 Will you be my Valentine? 💖</h3>
     <button class="mainBtn" onclick="yesClick()">Yes 😍</button>
-    <button id="no" onmouseover="moveNo()">No 😜</button>
+    <button id="no" ontouchstart="moveNo()" onmouseover="moveNo()">No 😜</button>
   </div>
 </div>
 
 <div id="final">
-  <h1>💖 Happy Rose Day My Love 🌹</h1>
-  <h2>You made my life beautiful 💕</h2>
-  <p>Forever Yours ❤️</p>
+  <h2>💖 Happy Rose Day My Love 🌹</h2>
+  <p>You made my life beautiful 💕</p>
 </div>
 
 </div>
@@ -131,63 +137,17 @@ button{
 <footer>✨ Site made by <b>Vihaan</b> 💖</footer>
 
 <script>
+/* Floating hearts */
 setInterval(()=>{
   let heart=document.createElement("div");
   heart.innerHTML="💖";
   heart.className="heart";
   heart.style.left=Math.random()*100+"vw";
-  heart.style.fontSize=(15+Math.random()*20)+"px";
   document.body.appendChild(heart);
   setTimeout(()=>heart.remove(),6000);
-},400);
-</script>
+},500);
 
-<script>
 let score=0;
 
 const params=new URLSearchParams(window.location.search);
-const gfName=params.get("name");
-
-if(gfName){
-  document.getElementById("generator").style.display="none";
-  document.getElementById("game").style.display="block";
-  document.getElementById("showName").innerHTML="For: "+gfName+" 💖";
-}
-
-function generateLink(){
-  let name=document.getElementById("nameInput").value;
-  if(name==""){alert("Enter name first");return;}
-  let link=window.location.origin+window.location.pathname+"?name="+encodeURIComponent(name);
-  document.getElementById("linkBox").innerHTML="<b>Send this link 💌:</b><br>"+link;
-}
-
-function scorePoint(){
-  score+=10;
-  if(score>100) score=100;
-  document.getElementById("bar").style.width=score+"%";
-  document.getElementById("scoreText").innerHTML="Love Meter: "+score+"%";
-
-  let rose=document.getElementById("rose");
-  rose.style.position="absolute";
-  rose.style.left=Math.random()*80+"%";
-  rose.style.top=Math.random()*70+"%";
-
-  if(score>=100){
-    document.getElementById("proposal").style.display="block";
-  }
-}
-
-function yesClick(){
-  document.getElementById("game").style.display="none";
-  document.getElementById("final").style.display="block";
-}
-
-function moveNo(){
-  let btn=document.getElementById("no");
-  btn.style.left=Math.random()*80+"%";
-  btn.style.top=Math.random()*80+"%";
-}
-</script>
-
-</body>
-</html>
+const gfName=params
