@@ -1,36 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Rose Day Link Generator 🌹</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Rose Day 🌹</title>
 
 <style>
 body{
+  margin:0;
+  font-family:Arial, sans-serif;
   text-align:center;
-  font-family:Arial;
-  background:linear-gradient(to right,#ff758c,#ff7eb3);
+  background:linear-gradient(135deg,#ff4d6d,#ff8fa3,#ffc2d1);
   color:white;
+  overflow:hidden;
+}
+
+footer{
+  position:fixed;
+  bottom:8px;
+  width:100%;
+  font-size:14px;
+  opacity:0.85;
+}
+
+/* Floating hearts */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:20px;
+  animation:float 6s linear infinite;
+  opacity:0.7;
+}
+@keyframes float{
+  from{transform:translateY(0);}
+  to{transform:translateY(-110vh);}
+}
+
+.container{
+  position:relative;
+  top:50%;
+  transform:translateY(-50%);
   padding:20px;
 }
+
 input{
-  padding:10px;
-  font-size:16px;
+  padding:12px;
   border-radius:10px;
   border:none;
+  font-size:16px;
 }
+
 button{
-  padding:10px 20px;
-  font-size:18px;
+  padding:12px 22px;
   border:none;
-  border-radius:20px;
+  border-radius:25px;
+  font-size:16px;
   cursor:pointer;
-  margin:10px;
+  margin:8px;
 }
-#game{display:none;}
+
+.mainBtn{background:white;color:#ff4d6d;font-weight:bold;}
 #no{position:absolute;background:black;color:white;}
+
+#rose{
+  font-size:60px;
+  cursor:pointer;
+  margin:15px;
+  transition:0.2s;
+}
+#rose:hover{transform:scale(1.2);}
+
+.progress{
+  width:80%;
+  height:12px;
+  background:rgba(255,255,255,0.3);
+  border-radius:20px;
+  margin:auto;
+}
+.bar{
+  height:100%;
+  width:0%;
+  background:white;
+  border-radius:20px;
+}
+
+#game,#final{display:none;}
 </style>
 </head>
 
 <body>
+
+<div class="container">
 
 <h1>🌹 Happy Rose Day 🌹</h1>
 
@@ -38,58 +97,95 @@ button{
   <p>Enter your Girlfriend Name 💖</p>
   <input type="text" id="nameInput" placeholder="Type name">
   <br>
-  <button onclick="generateLink()">Generate Link 🔗</button>
+  <button class="mainBtn" onclick="generateLink()">Generate Link 🔗</button>
   <p id="linkBox"></p>
 </div>
 
 <div id="game">
   <h2 id="showName"></h2>
-  <p>Tap rose to reach score 10 😍</p>
-  <div style="font-size:50px;cursor:pointer;" onclick="scorePoint()">🌹</div>
-  <p id="score">Score: 0</p>
+  <p>Catch the rose & fill love meter 💕</p>
+
+  <div id="rose" onclick="scorePoint()">🌹</div>
+
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <h3 id="scoreText">Love Meter: 0%</h3>
 
   <div id="proposal" style="display:none;">
     <h2>💖 Will you be my Valentine? 💖</h2>
-    <button onclick="alert('Yay 💖 Happy Rose Day 🌹')">Yes 😍</button>
+    <button class="mainBtn" onclick="yesClick()">Yes 😍</button>
     <button id="no" onmouseover="moveNo()">No 😜</button>
   </div>
 </div>
 
+<div id="final">
+  <h1>💖 Happy Rose Day My Love 🌹</h1>
+  <h2>You made my life beautiful 💕</h2>
+  <p>Forever Yours ❤️</p>
+</div>
+
+</div>
+
+<footer>✨ Site made by <b>Vihaan</b> 💖</footer>
+
+<script>
+setInterval(()=>{
+  let heart=document.createElement("div");
+  heart.innerHTML="💖";
+  heart.className="heart";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(15+Math.random()*20)+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),6000);
+},400);
+</script>
+
 <script>
 let score=0;
 
-// Get name from URL
 const params=new URLSearchParams(window.location.search);
 const gfName=params.get("name");
 
 if(gfName){
   document.getElementById("generator").style.display="none";
   document.getElementById("game").style.display="block";
-  document.getElementById("showName").innerHTML="For: "+gfName+" 🌹";
+  document.getElementById("showName").innerHTML="For: "+gfName+" 💖";
 }
 
 function generateLink(){
   let name=document.getElementById("nameInput").value;
   if(name==""){alert("Enter name first");return;}
   let link=window.location.origin+window.location.pathname+"?name="+encodeURIComponent(name);
-  document.getElementById("linkBox").innerHTML=
-  "<b>Copy this link and send 💖:</b><br>"+link;
+  document.getElementById("linkBox").innerHTML="<b>Send this link 💌:</b><br>"+link;
 }
 
 function scorePoint(){
-  score++;
-  document.getElementById("score").innerHTML="Score: "+score;
-  if(score>=10){
+  score+=10;
+  if(score>100) score=100;
+  document.getElementById("bar").style.width=score+"%";
+  document.getElementById("scoreText").innerHTML="Love Meter: "+score+"%";
+
+  let rose=document.getElementById("rose");
+  rose.style.position="absolute";
+  rose.style.left=Math.random()*80+"%";
+  rose.style.top=Math.random()*70+"%";
+
+  if(score>=100){
     document.getElementById("proposal").style.display="block";
   }
 }
 
+function yesClick(){
+  document.getElementById("game").style.display="none";
+  document.getElementById("final").style.display="block";
+}
+
 function moveNo(){
-  let x=Math.random()*window.innerWidth-100;
-  let y=Math.random()*window.innerHeight-50;
   let btn=document.getElementById("no");
-  btn.style.left=x+"px";
-  btn.style.top=y+"px";
+  btn.style.left=Math.random()*80+"%";
+  btn.style.top=Math.random()*80+"%";
 }
 </script>
 
