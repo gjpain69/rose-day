@@ -11,11 +11,11 @@ body{
   text-align:center;
   background:linear-gradient(135deg,#ff4d6d,#ff8fa3,#ffc2d1);
   color:white;
-  overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
+  overflow:hidden;
 }
 
 .container{
@@ -32,7 +32,7 @@ footer{
   opacity:0.9;
 }
 
-/* Hearts */
+/* Floating hearts */
 .heart{
   position:fixed;
   bottom:-20px;
@@ -91,6 +91,7 @@ button{
 }
 
 #game,#final{display:none;}
+a{color:white;word-break:break-all;}
 </style>
 </head>
 
@@ -100,6 +101,7 @@ button{
 
 <h2>🌹 Happy Rose Day 🌹</h2>
 
+<!-- LINK GENERATOR -->
 <div id="generator">
   <p>Enter your Girlfriend Name 💖</p>
   <input type="text" id="nameInput" placeholder="Type name">
@@ -108,6 +110,7 @@ button{
   <p id="linkBox"></p>
 </div>
 
+<!-- GAME -->
 <div id="game">
   <h3 id="showName"></h3>
   <p>Tap rose to fill love meter 💕</p>
@@ -127,6 +130,7 @@ button{
   </div>
 </div>
 
+<!-- FINAL -->
 <div id="final">
   <h2>💖 Happy Rose Day My Love 🌹</h2>
   <p>You made my life beautiful 💕</p>
@@ -149,5 +153,71 @@ setInterval(()=>{
 
 let score=0;
 
+/* READ NAME FROM LINK */
 const params=new URLSearchParams(window.location.search);
-const gfName=params
+const gfName=params.get("name");
+
+if(gfName){
+  document.getElementById("generator").style.display="none";
+  document.getElementById("game").style.display="block";
+  document.getElementById("showName").innerHTML="For: "+gfName+" 💖";
+}
+
+/* GENERATE LINK */
+function generateLink(){
+  let name=document.getElementById("nameInput").value.trim();
+  if(name===""){
+    alert("Enter name first");
+    return;
+  }
+
+  let baseURL = window.location.href.split("?")[0];
+  let link = baseURL + "?name=" + encodeURIComponent(name);
+
+  document.getElementById("linkBox").innerHTML =
+    "<b>Send this link 💌:</b><br>" +
+    "<a href='"+link+"' target='_blank'>"+link+"</a><br><br>" +
+    "<button onclick='copyLink(\""+link+"\")'>Copy Link 📋</button>";
+}
+
+/* COPY LINK */
+function copyLink(link){
+  navigator.clipboard.writeText(link);
+  alert("Link copied 👍");
+}
+
+/* GAME */
+function scorePoint(){
+  score+=10;
+  if(score>100) score=100;
+  document.getElementById("bar").style.width=score+"%";
+  document.getElementById("scoreText").innerHTML="Love Meter: "+score+"%";
+
+  let rose=document.getElementById("rose");
+  let maxX=window.innerWidth-80;
+  let maxY=window.innerHeight-200;
+  rose.style.position="fixed";
+  rose.style.left=Math.random()*maxX+"px";
+  rose.style.top=Math.random()*maxY+"px";
+
+  if(score>=100){
+    document.getElementById("proposal").style.display="block";
+  }
+}
+
+function yesClick(){
+  document.getElementById("game").style.display="none";
+  document.getElementById("final").style.display="block";
+}
+
+function moveNo(){
+  let btn=document.getElementById("no");
+  let maxX=window.innerWidth-100;
+  let maxY=window.innerHeight-60;
+  btn.style.left=Math.random()*maxX+"px";
+  btn.style.top=Math.random()*maxY+"px";
+}
+</script>
+
+</body>
+</html>
