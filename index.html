@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Happy Rose Day 🌹</title>
+<title>Rose Day Link Generator 🌹</title>
 
 <style>
 body{
@@ -9,15 +9,14 @@ body{
   font-family:Arial;
   background:linear-gradient(to right,#ff758c,#ff7eb3);
   color:white;
+  padding:20px;
 }
-
 input{
   padding:10px;
   font-size:16px;
   border-radius:10px;
   border:none;
 }
-
 button{
   padding:10px 20px;
   font-size:18px;
@@ -26,49 +25,55 @@ button{
   cursor:pointer;
   margin:10px;
 }
-
-#rose{font-size:50px;cursor:pointer;display:none;}
-#score{display:none;font-size:20px;}
-#proposal{display:none;}
+#game{display:none;}
 #no{position:absolute;background:black;color:white;}
 </style>
-
 </head>
 
 <body>
 
 <h1>🌹 Happy Rose Day 🌹</h1>
 
-<div id="start">
+<div id="generator">
   <p>Enter your Girlfriend Name 💖</p>
-  <input type="text" id="gfname" placeholder="Type name here">
+  <input type="text" id="nameInput" placeholder="Type name">
   <br>
-  <button onclick="startGame()">Start 💕</button>
+  <button onclick="generateLink()">Generate Link 🔗</button>
+  <p id="linkBox"></p>
 </div>
 
-<h2 id="showName"></h2>
+<div id="game">
+  <h2 id="showName"></h2>
+  <p>Tap rose to reach score 10 😍</p>
+  <div style="font-size:50px;cursor:pointer;" onclick="scorePoint()">🌹</div>
+  <p id="score">Score: 0</p>
 
-<p id="gameText" style="display:none;">Tap rose to reach score 10 😍</p>
-<div id="rose" onclick="scorePoint()">🌹</div>
-<div id="score">Score: 0</div>
-
-<div id="proposal">
-  <h2>💖 Will you be my Valentine? 💖</h2>
-  <button onclick="alert('Yay 💖 Happy Rose Day 🌹')">Yes 😍</button>
-  <button id="no" onmouseover="moveNo()">No 😜</button>
+  <div id="proposal" style="display:none;">
+    <h2>💖 Will you be my Valentine? 💖</h2>
+    <button onclick="alert('Yay 💖 Happy Rose Day 🌹')">Yes 😍</button>
+    <button id="no" onmouseover="moveNo()">No 😜</button>
+  </div>
 </div>
 
 <script>
 let score=0;
 
-function startGame(){
-  let name=document.getElementById("gfname").value;
-  if(name==""){name="My Love 💖";}
-  document.getElementById("showName").innerHTML="For: "+name+" 🌹";
-  document.getElementById("start").style.display="none";
-  document.getElementById("rose").style.display="block";
-  document.getElementById("score").style.display="block";
-  document.getElementById("gameText").style.display="block";
+// Get name from URL
+const params=new URLSearchParams(window.location.search);
+const gfName=params.get("name");
+
+if(gfName){
+  document.getElementById("generator").style.display="none";
+  document.getElementById("game").style.display="block";
+  document.getElementById("showName").innerHTML="For: "+gfName+" 🌹";
+}
+
+function generateLink(){
+  let name=document.getElementById("nameInput").value;
+  if(name==""){alert("Enter name first");return;}
+  let link=window.location.origin+window.location.pathname+"?name="+encodeURIComponent(name);
+  document.getElementById("linkBox").innerHTML=
+  "<b>Copy this link and send 💖:</b><br>"+link;
 }
 
 function scorePoint(){
